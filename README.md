@@ -1,3 +1,5 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+To run this project locally, first clone the repo and then create 2 .env files in the root dir of the cloned repo:
+1 - create .env.development file and paste this code in it -> PGDATABASE=nc_news
+2 - create .env.development.test file and paste this code in it -> PGDATABASE=nc_news_test
