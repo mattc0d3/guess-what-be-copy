@@ -23,3 +23,13 @@ describe("GET /api/topics", () => {
   });
   
 });
+describe('all non existing endpoint', () =>{
+  test("status 404: respond error message when passed a non existing route", () => {
+    return request(app)
+      .get("/api/banana")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.message).toBe('Not found');
+      });
+  });
+})
