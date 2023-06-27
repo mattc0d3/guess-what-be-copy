@@ -2,6 +2,7 @@ const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const request = require("supertest");
 const app = require("../app");
+const endpointsData = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(testData);
@@ -21,15 +22,24 @@ describe("GET /api/topics", () => {
         });
       });
   });
-  
 });
-describe('all non existing endpoint', () =>{
+describe("GET /api", () => {
+  test("status 200: should respond with a json object describing all the endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpointsData);
+      });
+  });
+});
+describe("all non existing endpoint", () => {
   test("status 404: respond error message when passed a non existing route", () => {
     return request(app)
       .get("/api/banana")
       .expect(404)
-      .then(({body}) => {
-        expect(body.message).toBe('Not found');
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
       });
   });
-})
+});
