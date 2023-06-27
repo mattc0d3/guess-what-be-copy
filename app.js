@@ -1,11 +1,15 @@
-const express = require('express')
-const {getTopics} = require('./controllers/ncnews.controllers')
-const app = express()
+const express = require("express");
+const { getTopics } = require("./controllers/ncnews.controllers");
+const app = express();
+const { getEndpoints } = require("./controllers/ncnews.controllers");
 
-app.get('/api/topics', getTopics)
+app.get("/api", getEndpoints);
 
-app.all('*', (req, res) =>{
-   res.status(404).send({message:'Not found'})
-})
+app.get("/api/topics", getTopics);
 
-module.exports = app
+app.all("*", (req, res) => {
+  res.status(404).send({ message: "Not found" });
+});
+console.log(app);
+
+module.exports = app;
