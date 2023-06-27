@@ -43,3 +43,28 @@ describe("all non existing endpoint", () => {
       });
   });
 });
+describe("GET /api/articles/:article_id", () => {
+  test("status 200: responds with the queried article", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({body}) =>{
+        expect(body.article).toHaveProperty("title", expect.any(String));
+        expect(body.article).toHaveProperty("topic", expect.any(String));
+        expect(body.article).toHaveProperty("author", expect.any(String));
+        expect(body.article).toHaveProperty("body", expect.any(String));
+        expect(body.article).toHaveProperty("created_at", expect.any(String));
+        expect(body.article).toHaveProperty("votes", expect.any(Number));
+        expect(body.article).toHaveProperty("article_img_url", expect.any(String));
+      })
+      
+  });
+  test('status 400: responds with an error message when an invalid parameter is used', () =>{
+    return request(app)
+    .get('/api/articles/banana')
+    .expect(400)
+    .then(({body}) =>{
+      expect(body.message).toBe('Bad request')
+    })
+  })
+});
