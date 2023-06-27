@@ -48,23 +48,34 @@ describe("GET /api/articles/:article_id", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
-      .then(({body}) =>{
+      .then(({ body }) => {
+        expect(body.article.article_id).toBe(1);
         expect(body.article).toHaveProperty("title", expect.any(String));
         expect(body.article).toHaveProperty("topic", expect.any(String));
         expect(body.article).toHaveProperty("author", expect.any(String));
         expect(body.article).toHaveProperty("body", expect.any(String));
         expect(body.article).toHaveProperty("created_at", expect.any(String));
         expect(body.article).toHaveProperty("votes", expect.any(Number));
-        expect(body.article).toHaveProperty("article_img_url", expect.any(String));
-      })
-      
+        expect(body.article).toHaveProperty(
+          "article_img_url",
+          expect.any(String)
+        );
+      });
   });
-  test('status 400: responds with an error message when an invalid parameter is used', () =>{
+  test("status 400: responds with an error message when an invalid parameter is used", () => {
     return request(app)
-    .get('/api/articles/banana')
-    .expect(400)
-    .then(({body}) =>{
-      expect(body.message).toBe('Bad request')
-    })
-  })
+      .get("/api/articles/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
+      });
+  });
+  test("(status 404: responds with an error message when the parameter is valid but does not exist)", () => {
+    return request(app)
+      .get("/api/articles/99999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
+      });
+  });
 });
