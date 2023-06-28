@@ -79,3 +79,32 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 });
+describe("GET /api/articles", () => {
+  test("status 200: should respond with an array of article objects  ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles.length).toBe(13);
+        body.articles.forEach((article) => {
+          expect(article).toHaveProperty("author", expect.any(String));
+          expect(article).toHaveProperty("title", expect.any(String));
+          expect(article).toHaveProperty("article_id", expect.any(Number));
+          expect(article).toHaveProperty("topic", expect.any(String));
+          expect(article).toHaveProperty("created_at", expect.any(String));
+          expect(article).toHaveProperty("votes", expect.any(Number));
+          expect(article).toHaveProperty("article_img_url", expect.any(String));
+          expect(article).toHaveProperty("comment_count", expect.any(Number));
+          expect(article.body).toBe(undefined);
+        });
+        expect(body.articles[0].comment_count).toBe(2); //article 3 has 2 comments
+        expect(body.articles[6].comment_count).toBe(11); //article 1 has 11 comments
+        const created_atArray = body.articles.map((article) =>{
+          return article.created_at
+        })
+        console.log(created_atArray)
+        expect(created_atArray).toBeSorted({ descending: true });
+      });
+  });
+ });

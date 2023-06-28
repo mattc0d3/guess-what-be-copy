@@ -16,3 +16,27 @@ exports.selectSelectArticleById = (article_id) => {
       return rows[0];
     });
 };
+
+exports.selectArticles = () => {
+  return Promise.all([
+    db.query("SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles ORDER BY created_at DESC;"),
+    db.query("SELECT * FROM comments;"),
+  ]).then((arrayOfTables) => {
+    
+    const articles = arrayOfTables[0].rows;
+    const comments = arrayOfTables[1].rows;
+    articles.forEach((article) => {
+      
+      article.comment_count = 0;
+    });
+    articles.forEach((article) => {
+      comments.forEach((comment) => {
+        if (comment.article_id === article.article_id) {
+          article.comment_count += 1;
+        }
+      });
+    });
+
+    return articles;
+  });
+};
