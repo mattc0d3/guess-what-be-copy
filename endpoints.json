@@ -34,5 +34,21 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves all comments for an article.",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 1,
+          "votes": 7,
+          "author": "weegembump",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+          "article_id": 2
+        }
+      ]
+    }
   }
 }

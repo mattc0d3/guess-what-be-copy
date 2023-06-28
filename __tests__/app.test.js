@@ -100,11 +100,38 @@ describe("GET /api/articles", () => {
         });
         expect(body.articles[0].comment_count).toBe(2); //article 3 has 2 comments
         expect(body.articles[6].comment_count).toBe(11); //article 1 has 11 comments
-        const created_atArray = body.articles.map((article) =>{
-          return article.created_at
-        })
-        console.log(created_atArray)
+        const created_atArray = body.articles.map((article) => {
+          return article.created_at;
+        });
         expect(created_atArray).toBeSorted({ descending: true });
       });
   });
- });
+});
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: responds with an array of comments for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeInstanceOf(Array);
+        expect(body.comments.length).toBe(11);
+        expect(body.comments).toBeSorted({ descending: true });
+        body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("article_id", expect.any(Number));
+        });
+      });
+  });
+  test("404: responds with an error message when the article_id passed as parameter does not exist ", () => {
+    return request(app)
+      .get("/api/articles/99999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
+      });
+  });
+});
