@@ -52,9 +52,7 @@ exports.getCommentsByArticle = (req, res, next) => {
 };
 
 exports.postComment = (req, res, next) => {
-  if (!req.body.username || !req.body.body) {
-    res.status(400).send({ message: "Bad request, missing fields" });
-  }
+  
   insertComment(req.body, req.params)
     .then((comment) => {
       res.status(201).send(comment);

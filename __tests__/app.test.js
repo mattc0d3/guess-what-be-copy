@@ -170,10 +170,10 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body).toHaveProperty("created_at", expect.any(String));
         expect(body).toHaveProperty("author", expect.any(String));
         expect(body).toHaveProperty("body", expect.any(String));
-        expect(body).toHaveProperty("article_id", expect.any(Number));
+        expect(body.article_id).toBe(1);
       });
   });
-  test('201: ignores additional input, adds the new comment and responds with the posted comment', () => {
+  test("201: ignores additional input, adds the new comment and responds with the posted comment", () => {
     const newComment = {
       username: "lurker",
       body: "I like this article",
@@ -190,11 +190,10 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body).toHaveProperty("created_at", expect.any(String));
         expect(body).toHaveProperty("author", expect.any(String));
         expect(body).toHaveProperty("body", expect.any(String));
-        expect(body).toHaveProperty("article_id", expect.any(Number));
+        expect(body.article_id).toBe(1);
       });
-    
   });
-  test("400: responds with an error message when the request has missing required fields", () => {
+  test.only("400: responds with an error message when the request has missing required fields", () => {
     const newComment = {
       body: "I like this article",
     };
@@ -216,7 +215,20 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(404)
       .send(newComment)
       .then(({ body }) => {
-        expect(body.message).toBe("Article not found");
+        expect(body.message).toBe("Not found");
+      });
+  });
+  test("404: responds with an error message when the provided username does not exist", () => {
+    const newComment = {
+      username: "pablo",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(404)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
       });
   });
   test("status 400: responds with an error message when an invalid type article_id is used", () => {

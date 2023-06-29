@@ -28,7 +28,7 @@ app.all("*", (req, res) => {
 app.use((err, req, res, next) => {
   if (err.code) {
     if (err.code === "23503") {
-      res.status(404).send({ message: "Article not found" });
+      res.status(404).send({ message: "Not found" });
     }
 
     res.status(400).send({ message: "Bad request" });
@@ -36,6 +36,11 @@ app.use((err, req, res, next) => {
 });
 app.use((err, req, res, next) => {
   if (err.message) {
+    if (err.status === 400) {
+      res
+        .status(400)
+        .send({ status: 400, message: "Bad request, missing fields" });
+    }
     res.status(404).send({ status: 404, message: err.message });
   }
 });
