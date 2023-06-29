@@ -50,5 +50,16 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "serves all comments for an article.",
+    "queries": ["article_id"],
+    "example response": {
+      "comments":[{
+        "username": "Pablo",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim a"
+      }]
+    }
+
   }
 }

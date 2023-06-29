@@ -5,6 +5,9 @@ const { getEndpoints } = require("./controllers/ncnews.controllers");
 const { getArticleById } = require("./controllers/ncnews.controllers");
 const { getArticles } = require("./controllers/ncnews.controllers");
 const { getCommentsByArticle } = require("./controllers/ncnews.controllers");
+const { postComment } = require("./controllers/ncnews.controllers");
+
+app.use(express.json());
 
 app.get("/api", getEndpoints);
 
@@ -16,12 +19,18 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
+app.post("/api/articles/:article_id/comments", postComment);
+
 app.all("*", (req, res) => {
   res.status(404).send({ message: "Not found" });
 });
 
 app.use((err, req, res, next) => {
   if (err.code) {
+    if (err.code === "23503") {
+      res.status(404).send({ message: "Article not found" });
+    }
+
     res.status(400).send({ message: "Bad request" });
   } else next(err);
 });
@@ -30,5 +39,4 @@ app.use((err, req, res, next) => {
     res.status(404).send({ status: 404, message: err.message });
   }
 });
-
 module.exports = app;
