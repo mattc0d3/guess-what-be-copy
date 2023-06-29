@@ -103,7 +103,6 @@ describe("GET /api/articles", () => {
         const created_atArray = body.articles.map((article) =>{
           return article.created_at
         })
-        console.log(created_atArray)
         expect(created_atArray).toBeSorted({ descending: true });
       });
   });
