@@ -100,9 +100,11 @@ describe("GET /api/articles", () => {
         });
         expect(body.articles[0].comment_count).toBe(2); //article 3 has 2 comments
         expect(body.articles[6].comment_count).toBe(11); //article 1 has 11 comments
+
         const created_atArray = body.articles.map((article) => {
           return article.created_at;
         });
+
         expect(created_atArray).toBeSorted({ descending: true });
       });
   });
