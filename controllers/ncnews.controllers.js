@@ -3,6 +3,7 @@ const {
   selectSelectArticleById,
   selectArticles,
   selectCommentsByArticle,
+  checkArticleExists,
 } = require("../models/ncnews.models");
 const endpointsData = require("../endpoints.json");
 
@@ -35,8 +36,15 @@ exports.getArticles = (req, res, next) => {
 
 exports.getCommentsByArticle = (req, res, next) => {
   const { article_id } = req.params;
-  selectCommentsByArticle(article_id)
-    .then((comments) => {
+  const promises = [selectCommentsByArticle(article_id)];
+
+  if (article_id) {
+    promises.push(checkArticleExists(article_id));
+  }
+
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const comments = resolvedPromises[0];
       res.status(200).send({ comments });
     })
     .catch(next);
