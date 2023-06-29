@@ -173,6 +173,27 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body).toHaveProperty("article_id", expect.any(Number));
       });
   });
+  test('201: ignores additional input, adds the new comment and responds with the posted comment', () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+      age: "Ignore my age",
+      Height: "Ignore my height",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comment_id", expect.any(Number));
+        expect(body).toHaveProperty("votes", expect.any(Number));
+        expect(body).toHaveProperty("created_at", expect.any(String));
+        expect(body).toHaveProperty("author", expect.any(String));
+        expect(body).toHaveProperty("body", expect.any(String));
+        expect(body).toHaveProperty("article_id", expect.any(Number));
+      });
+    
+  });
   test("400: responds with an error message when the request has missing required fields", () => {
     const newComment = {
       body: "I like this article",
@@ -196,6 +217,19 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .then(({ body }) => {
         expect(body.message).toBe("Article not found");
+      });
+  });
+  test("status 400: responds with an error message when an invalid type article_id is used", () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/notanumber/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
       });
   });
 });
