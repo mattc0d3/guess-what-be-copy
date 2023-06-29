@@ -4,6 +4,7 @@ const { getTopics } = require("./controllers/ncnews.controllers");
 const { getEndpoints } = require("./controllers/ncnews.controllers");
 const { getArticleById } = require("./controllers/ncnews.controllers");
 const { getArticles } = require("./controllers/ncnews.controllers");
+const { getCommentsByArticle } = require("./controllers/ncnews.controllers");
 
 app.get("/api", getEndpoints);
 
@@ -12,6 +13,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles", getArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
 app.all("*", (req, res) => {
   res.status(404).send({ message: "Not found" });
