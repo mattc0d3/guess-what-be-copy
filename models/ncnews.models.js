@@ -59,3 +59,19 @@ exports.checkArticleExists = (article_id) => {
       }
     });
 };
+exports.insertComment = (newComment, article_id) => {
+  
+  if (!newComment.username || !newComment.body) {
+    return Promise.reject({ status: 400, message: "Bad request, missing fields" })
+  }
+  return db
+    .query(
+      `INSERT INTO comments (
+    body, article_id, author
+  ) VALUES($1, $2, $3) RETURNING *;`,
+      [newComment.body, article_id.article_id, newComment.username]
+    )
+    .then((insertedComment) => {
+      return insertedComment.rows[0];
+    });
+};

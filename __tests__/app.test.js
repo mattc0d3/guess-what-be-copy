@@ -154,3 +154,94 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: add a comment for an article and responds with the posted comment", () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comment_id", expect.any(Number));
+        expect(body).toHaveProperty("votes", expect.any(Number));
+        expect(body).toHaveProperty("created_at", expect.any(String));
+        expect(body).toHaveProperty("author", expect.any(String));
+        expect(body).toHaveProperty("body", expect.any(String));
+        expect(body.article_id).toBe(1);
+      });
+  });
+  test("201: ignores additional input, adds the new comment and responds with the posted comment", () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+      age: "Ignore my age",
+      Height: "Ignore my height",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comment_id", expect.any(Number));
+        expect(body).toHaveProperty("votes", expect.any(Number));
+        expect(body).toHaveProperty("created_at", expect.any(String));
+        expect(body).toHaveProperty("author", expect.any(String));
+        expect(body).toHaveProperty("body", expect.any(String));
+        expect(body.article_id).toBe(1);
+      });
+  });
+  test.only("400: responds with an error message when the request has missing required fields", () => {
+    const newComment = {
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request, missing fields");
+      });
+  });
+  test("404: responds with an error message when the provided article_id does not exist", () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/9999/comments")
+      .expect(404)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
+      });
+  });
+  test("404: responds with an error message when the provided username does not exist", () => {
+    const newComment = {
+      username: "pablo",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(404)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
+      });
+  });
+  test("status 400: responds with an error message when an invalid type article_id is used", () => {
+    const newComment = {
+      username: "lurker",
+      body: "I like this article",
+    };
+    return request(app)
+      .post("/api/articles/notanumber/comments")
+      .expect(400)
+      .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
+      });
+  });
+});
