@@ -291,3 +291,15 @@ describe("PATCH /api/articles/1", () => {
       });
   });
 });
+test("404: responds with an error message when the provided article_id does not exist", () => {
+  const inc_votes = {
+    inc_votes: 10,
+  };
+  return request(app)
+    .post("/api/articles/9999")
+    .expect(404)
+    .send(inc_votes)
+    .then(({ body }) => {
+      expect(body.message).toBe("Not found");
+    });
+});
