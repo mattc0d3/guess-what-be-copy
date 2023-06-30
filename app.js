@@ -7,6 +7,7 @@ const { getArticles } = require("./controllers/ncnews.controllers");
 const { getCommentsByArticle } = require("./controllers/ncnews.controllers");
 const { postComment } = require("./controllers/ncnews.controllers");
 const { patchArticle } = require("./controllers/ncnews.controllers");
+const { deleteComment } = require("./controllers/ncnews.controllers");
 
 app.use(express.json());
 
@@ -23,6 +24,8 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 app.post("/api/articles/:article_id/comments", postComment);
 
 app.patch("/api/articles/:article_id", patchArticle);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.all("*", (req, res) => {
   res.status(404).send({ message: "Not found" });
