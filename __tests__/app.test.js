@@ -193,7 +193,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.article_id).toBe(1);
       });
   });
-  test.only("400: responds with an error message when the request has missing required fields", () => {
+  test("400: responds with an error message when the request has missing required fields", () => {
     const newComment = {
       body: "I like this article",
     };
@@ -202,7 +202,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .send(newComment)
       .then(({ body }) => {
-        expect(body.message).toBe("Bad request, missing fields");
+        expect(body.message).toBe("Bad request");
       });
   });
   test("404: responds with an error message when the provided article_id does not exist", () => {
@@ -240,6 +240,52 @@ describe("POST /api/articles/:article_id/comments", () => {
       .post("/api/articles/notanumber/comments")
       .expect(400)
       .send(newComment)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
+      });
+  });
+});
+describe("PATCH /api/articles/1", () => {
+  test("200: responds wIth the updated object ", () => {
+    const inc_votes = {
+      inc_votes: 10,
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .expect(200)
+      .send({ inc_votes })
+      .then(({ body }) => {
+        expect(body.article_id).toBe(1);
+        expect(body).toHaveProperty("topic", expect.any(String));
+        expect(body).toHaveProperty("author", expect.any(String));
+        expect(body).toHaveProperty("body", expect.any(String));
+        expect(body).toHaveProperty("created_at", expect.any(String));
+        expect(body).toHaveProperty("article_img_url", expect.any(String));
+        expect(body.votes).toBe(
+          testData.articleData[0].votes + inc_votes.inc_votes
+        );
+      });
+  });
+  test("400: responds with an error message when an invalid type of input is passed", () => {
+    const inc_votes = {
+      inc_votes: "ten",
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .expect(400)
+      .send(inc_votes)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
+      });
+  });
+  test("400: responds with error message when passed an invalid article ", () => {
+    const inc_votes = {
+      inc_votes: 10,
+    };
+    return request(app)
+      .patch("/api/articles/notanumber")
+      .expect(400)
+      .send(inc_votes)
       .then(({ body }) => {
         expect(body.message).toBe("Bad request");
       });

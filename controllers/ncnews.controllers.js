@@ -5,6 +5,7 @@ const {
   selectCommentsByArticle,
   checkArticleExists,
   insertComment,
+  updateArticle,
 } = require("../models/ncnews.models");
 const endpointsData = require("../endpoints.json");
 
@@ -52,10 +53,17 @@ exports.getCommentsByArticle = (req, res, next) => {
 };
 
 exports.postComment = (req, res, next) => {
-  
   insertComment(req.body, req.params)
     .then((comment) => {
       res.status(201).send(comment);
+    })
+    .catch(next);
+};
+
+exports.patchArticle = (req, res, next) => {
+  updateArticle(req.body, req.params)
+    .then((article) => {
+      res.status(200).send(article);
     })
     .catch(next);
 };

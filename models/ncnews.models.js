@@ -60,9 +60,11 @@ exports.checkArticleExists = (article_id) => {
     });
 };
 exports.insertComment = (newComment, article_id) => {
-  
   if (!newComment.username || !newComment.body) {
-    return Promise.reject({ status: 400, message: "Bad request, missing fields" })
+    return Promise.reject({
+      status: 400,
+      message: "Bad request, missing fields",
+    });
   }
   return db
     .query(
@@ -73,5 +75,22 @@ exports.insertComment = (newComment, article_id) => {
     )
     .then((insertedComment) => {
       return insertedComment.rows[0];
+    });
+};
+exports.updateArticle = (votesInc, article_id) => {
+  if (typeof votesInc.inc_votes.inc_votes !== "number") {
+    return Promise.reject({ status: 400, message: "Bad request" });
+  }
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *`,
+      [article_id.article_id, votesInc.inc_votes.inc_votes]
+    )
+    .then((updatedArticle) => {
+      if (!updatedArticle.rows.length) {
+        return Promise.reject({ status: 404, message: "Not found" });
+      }
+
+      return updatedArticle.rows[0];
     });
 };
