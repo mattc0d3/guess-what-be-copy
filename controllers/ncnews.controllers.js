@@ -6,6 +6,7 @@ const {
   checkArticleExists,
   insertComment,
   updateArticle,
+  removeComment,
 } = require("../models/ncnews.models");
 const endpointsData = require("../endpoints.json");
 
@@ -64,6 +65,15 @@ exports.patchArticle = (req, res, next) => {
   updateArticle(req.body, req.params)
     .then((article) => {
       res.status(200).send(article);
+    })
+    .catch(next);
+};
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+
+  removeComment(comment_id)
+    .then(() => {
+      res.status(204).send({});
     })
     .catch(next);
 };

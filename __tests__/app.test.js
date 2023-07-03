@@ -303,3 +303,30 @@ test("404: responds with an error message when the provided article_id does not 
       expect(body.message).toBe("Not found");
     });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: responds with status 204 and no content", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test('"404: responds with an error message when the provided comment does not exist" ', () => {
+    return request(app)
+      .delete("/api/comments/99999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Not found");
+      });
+  });
+  test("400: responds with error message when passed an invalid comment type ", () => {
+    return request(app)
+      .delete("/api/comments/notanumber")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request");
+      });
+  });
+});
