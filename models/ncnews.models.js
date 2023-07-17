@@ -17,10 +17,16 @@ exports.selectSelectArticleById = (article_id) => {
     });
 };
 
-exports.selectArticles = () => {
+exports.selectArticles = (topic) => {
+  const orderByString = 'ORDER BY created_at DESC;'
+  let queryString = "SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles "
+  if(topic){
+    queryString +=`WHERE topic = $1 `
+  }
+  queryString += orderByString
   return Promise.all([
     db.query(
-      "SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles ORDER BY created_at DESC;"
+      queryString
     ),
     db.query("SELECT * FROM comments;"),
   ]).then((arrayOfTables) => {
@@ -38,7 +44,12 @@ exports.selectArticles = () => {
     });
 
     return articles;
-  });
+  })
+  .catch(err =>{
+    console.log(err)
+  })
+
+  
 };
 exports.selectCommentsByArticle = (article_id) => {
   return db
@@ -105,3 +116,9 @@ exports.removeComment = (comment_id) => {
       }
     });
 };
+exports.selectAllUsers = () =>{
+  return db.query('SELECT * FROM users;').then(({rows}) =>{
+
+    return rows
+  })
+}

@@ -7,6 +7,7 @@ const {
   insertComment,
   updateArticle,
   removeComment,
+  selectAllUsers
 } = require("../models/ncnews.models");
 const endpointsData = require("../endpoints.json");
 
@@ -30,7 +31,8 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const {topic} = req.query
+  selectArticles(topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -77,3 +79,11 @@ exports.deleteComment = (req, res, next) => {
     })
     .catch(next);
 };
+exports.getAllUsers = (req, res, next) =>{
+  selectAllUsers()
+  .then((users) =>{
+    res.status(200).send({users})
+  })
+  .catch(next)
+
+}
