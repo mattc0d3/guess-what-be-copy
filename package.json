@@ -4,7 +4,6 @@
   "description": "bc-nc-news",
   "main": "listen.js",
   "scripts": {
-    
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
@@ -12,7 +11,6 @@
     "seed-prod": "NODE_ENV=production npm run seed",
     "start": "node listen.js",
     "devStart": "nodemon seed.js"
-
   },
   "repository": {
     "type": "git",
@@ -31,15 +29,15 @@
     "jest-extended": "^2.0.0",
     "jest-sorted": "^1.0.14",
     "nodemon": "^3.0.1",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.18.2",
     "mongoose": "^7.4.1",
-    "pg": "^8.11.0",
-    "supertest": "^6.3.3"
+    "pg": "^8.11.0"
   },
   "jest": {
     "setupFilesAfterEnv": [
