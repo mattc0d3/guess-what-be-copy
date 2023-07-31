@@ -1,10 +1,10 @@
-const db = require("../db/connection");
 const mongoose = require('mongoose')
-const { chooseAliens } = require('../utils/utils')
+const chooseAliens = require('../utils/utils')
+const Alien = require("../db/seeds/Alien");
 
-exports.selectAliens = () =>{
-    
-    const allAliens = mongoose.connection.aliens.find()
-    console.log(allAliens)
-    return chooseAliens(allAliens)
+exports.selectAliens = async () =>{
+    const aliens = await Alien.find()
+    console.log(aliens.length, "<<<<<<<<<<<<< aliens length")
+    const randomAliens = chooseAliens(aliens)
+    return randomAliens
 }
