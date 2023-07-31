@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
-
+const { getAliens } = require('./controllers/aliens.controllers')
 const cors = require('cors');
 
 app.use(cors());
+
+console.log(getAliens)
 
 app.use(express.json());
 
