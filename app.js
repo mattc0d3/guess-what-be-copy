@@ -2,10 +2,9 @@ const express = require("express");
 const app = express();
 const { getAliens } = require('./controllers/aliens.controllers')
 const cors = require('cors');
+const { handleMongoDbErrors, handleCustomErrors, handleInternalErrors } = require('./errors/errors') 
 
 app.use(cors());
-
-console.log(getAliens)
 
 app.use(express.json());
 
@@ -21,5 +20,12 @@ app.get("/api/aliens", getAliens);
 
 // app.get("/api/questions", getQuestions);
 
+app.all("*", (_, res) => res.status(404).send({ msg: "Not Found"}))
+
+app.use(handleMongoDbErrors)
+
+app.use(handleCustomErrors)
+
+app.use(handleInternalErrors)
 
 module.exports = app;

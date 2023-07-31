@@ -6,11 +6,11 @@ mongoose.connect("mongodb://localhost/guess_what");
 async function seed(attributes) {
   
 
-  // mongoose.connection.collections['aliens'].drop( function(err) {
-  //   console.log('collection dropped');
-  // });
+  mongoose.connection.collections['aliens'].drop( function(err) {
+    console.log('collection dropped');
+  });
+  
   seedAliens(attributes)
-
 
   async function seedAliens(attributes, currentCombination = {}) {
     const attributeKeys = Object.keys(attributes);
