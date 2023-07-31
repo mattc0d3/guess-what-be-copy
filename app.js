@@ -1,16 +1,19 @@
 const express = require("express");
 const app = express();
-require('dotenv').config()
 const { getAliens } = require('./controllers/aliens.controllers')
+const { getEndpoints } = require('./controllers/api.controllers')
 const cors = require('cors');
-const { handleMongoDbErrors, handleCustomErrors, handleInternalErrors } = require('./errors/errors') 
 const connectDB = require('./db/connectMongo')
+
+require('dotenv').config()
+
 connectDB()
+
 app.use(cors());
 
 app.use(express.json());
 
-// app.get("/api", getEndpoints);
+app.get("/api", getEndpoints);
 
 app.get("/api/aliens", getAliens);
 
@@ -23,12 +26,6 @@ app.get("/api/aliens", getAliens);
 // app.get("/api/questions", getQuestions);
 
 app.all("*", (_, res) => res.status(404).send({ msg: "Not Found"}))
-
-app.use(handleMongoDbErrors)
-
-app.use(handleCustomErrors)
-
-app.use(handleInternalErrors)
 
 const PORT = process.env.PORT
 
