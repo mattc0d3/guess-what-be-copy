@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Alien = require("./Alien");
 
-mongoose.connect("mongodb://localhost/guess_what");
+mongoose.connect("mongodb://127.0.0.1/guess_what");
 
 async function seed(attributes) {
   
