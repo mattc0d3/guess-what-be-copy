@@ -1,5 +1,5 @@
 const attributes = {
-    skinColour: ["blue", "purple", "green"],
+    skinColour: ["green", "blue", "purple"],
     horns: [0, 2, 4],
     eyes: [1, 2, 3, 4, 5],
     eyeColour: ["red", "yellow", "orange"],
