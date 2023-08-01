@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 const Alien = require("./Alien");
 const connectDB = require('../connectMongo')
 
-// await mongoose.connect("mongodb://127.0.0.1/guess_what");
-
 connectDB()
 
 async function seed(attributes) {
   
-  await mongoose.connection.collections["aliens"].drop(async (err) => {
-    await console.log("collection dropped");
-  });
+  // await mongoose.connection.collections["aliens"].drop(async (err) => {
+  //   await console.log("collection dropped");
+  // });
+
+  await mongoose.connection.collection('aliens').deleteMany({})
 
   async function seedAliens(attributes, currentCombination = {}) {
     const attributeKeys = Object.keys(attributes);

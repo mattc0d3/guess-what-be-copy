@@ -1,24 +1,20 @@
 const seed = require("../db/seeds/seed");
 const request = require("supertest");
+const mongoose = require("mongoose")
 const app = require("../app");
 const { testAttributes } = require("../db/seeds/attributes");
-const connectDB = require("../db/connectMongo");
 
 beforeEach(async () => {
-  // await mongoose.disconnect()
-  await connectDB();
   await seed(testAttributes);
 });
 
-// afterAll( async () => {
-//   // await mongoose.connection.close()
-//   await mongoose.disconnect()
-//   await mongoose.connection.close()
-// })
+afterAll( async () => {
+  await mongoose.connection.close()
+})
 
 describe("GET /api", () => {
-  test("responds with JSON object containing endpoints key", () => {
-    return request(app)
+  test("responds with JSON object containing endpoints key", async () => {
+    await request(app)
       .get("/api")
       .expect(200)
       .expect("Content-Type", "application/json; charset=utf-8")
@@ -26,8 +22,8 @@ describe("GET /api", () => {
         expect(body.hasOwnProperty("endpoints")).toBe(true);
       });
     });
-    test.only("endpoints object contains keys of endpoints and object values that describe attributes", () => {
-      return request(app)
+    test("endpoints object contains keys of endpoints and object values that describe attributes", async () => {
+      await request(app)
       .get("/api")
       .expect(200)
       .then(({ body }) => {
@@ -50,8 +46,8 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/aliens", () => {
-  test("status 200: should respond with an array of 24 randomly selected aliens ", () => {
-    return request(app)
+  test("status 200: should respond with an array of 24 randomly selected aliens ", async () => {
+    await request(app)
       .get("/api/aliens")
       .expect(200)
       .then(({ body }) => {
@@ -61,8 +57,8 @@ describe("GET /api/aliens", () => {
         });
       });
   });
-  test("returns an array of objects containing all the correct keys and value types", () => {
-    return request(app)
+  test("returns an array of objects containing all the correct keys and value types", async () => {
+    await request(app)
       .get("/api/aliens")
       .expect(200)
       .then(({ body }) => {
@@ -83,8 +79,8 @@ describe("GET /api/aliens", () => {
       });
   });
   describe("error handling", () => {
-    test("returns 404 status and error message when bad endpoint requested", () => {
-      return request(app)
+    test("returns 404 status and error message when bad endpoint requested", async () => {
+      await request(app)
         .get("/api/alien")
         .expect(404)
         .then(({ body }) => {
