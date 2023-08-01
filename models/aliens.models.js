@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const chooseAliens = require('../utils/utils')
 const Alien = require("../db/seeds/Alien");
 
