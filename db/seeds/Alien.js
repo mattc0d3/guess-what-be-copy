@@ -22,7 +22,8 @@ const alienSchema = new mongoose.Schema({
     eyeColour: String,
     isFriendly: Boolean,
     hasAntenna: Boolean,
-    planet: String
+    planet: String,
+    isActive: Boolean
 })
 
 module.exports = mongoose.model("Alien", alienSchema)

@@ -74,6 +74,7 @@ describe("GET /api/aliens", () => {
             isFriendly: expect.any(Boolean),
             hasAntenna: expect.any(Boolean),
             planet: expect.any(String),
+            isActive: expect.any(Boolean)
           });
         });
       });

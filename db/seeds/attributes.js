@@ -7,6 +7,7 @@ const attributes = {
     isFriendly: [true, false],
     skinTexture: ["furry", "scaly", "normal"],
     planet: ["desert", "ice", "lava"],
+    isActive: [true]
   };
 
   const testAttributes = {
@@ -18,6 +19,7 @@ const attributes = {
     isFriendly: [true, false],
     skinTexture: ["furry"],
     planet: ["desert"],
+    isActive: [true]
   };
 
   module.exports = { attributes, testAttributes }
