@@ -1,0 +1,23 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all available endpoints of the API"
+  },
+  "GET /api/aliens": {
+    "description": "serves an array of 24 aliens randomly selected from the aliens database",
+    "queries": [],
+    "exampleResponse": {
+      "aliens": {
+        "_id": "64c82a7c28ec9bd724a3842a",
+        "skinColour": "blue",
+        "skinTexture": "furry",
+        "eyes": 1,
+        "horns": 0,
+        "eyeColour": "green",
+        "isFriendly": false,
+        "hasAntenna": false,
+        "planet": "desert",
+        "__v": 0
+      }
+    }
+  }
+}

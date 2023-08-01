@@ -1,31 +1,64 @@
 const seed = require("../db/seeds/seed");
-const mongoose = require("mongoose");
 const request = require("supertest");
+const mongoose = require("mongoose")
 const app = require("../app");
 const { testAttributes } = require("../db/seeds/attributes");
 
-beforeEach(() => {
-  return seed(testAttributes);
+beforeEach(async () => {
+  await seed(testAttributes);
 });
 
-// afterAll(() => {
-//   return mongoose.connection.close()
-// })
+afterAll( async () => {
+  await mongoose.connection.close()
+})
+
+describe("GET /api", () => {
+  test("responds with JSON object containing endpoints key", async () => {
+    await request(app)
+      .get("/api")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then(({ body }) => {
+        expect(body.hasOwnProperty("endpoints")).toBe(true);
+      });
+    });
+    test("endpoints object contains keys of endpoints and object values that describe attributes", async () => {
+      await request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(
+          Object.keys(body.endpoints).forEach((key) => expect.any(String))
+        );
+        expect(
+          Object.values(body.endpoints).forEach((value) => {
+            if (value !== body.endpoints["GET /api"]) {
+              expect(value).toMatchObject({
+                description: expect.any(String),
+                queries: expect.any(Array),
+                exampleResponse: expect.any(Object),
+              });
+            }
+          })
+        );
+      });
+  });
+});
 
 describe("GET /api/aliens", () => {
-  test("status 200: should respond with an array of 24 randomly selected aliens ", () => {
-    return request(app)
+  test("status 200: should respond with an array of 24 randomly selected aliens ", async () => {
+    await request(app)
       .get("/api/aliens")
       .expect(200)
       .then(({ body }) => {
         expect(body.aliens.length).toBe(24);
-        body.aliens.forEach(alien => {
-          expect(alien).not.toBe(null)
-        })
+        body.aliens.forEach((alien) => {
+          expect(alien).not.toBe(null);
+        });
       });
   });
-  test("returns an array of objects containing all the correct keys and value types", () => {
-    return request(app)
+  test("returns an array of objects containing all the correct keys and value types", async () => {
+    await request(app)
       .get("/api/aliens")
       .expect(200)
       .then(({ body }) => {
@@ -46,13 +79,13 @@ describe("GET /api/aliens", () => {
       });
   });
   describe("error handling", () => {
-    test("returns 404 status and error message when bad endpoint requested", () => {
-      return request(app)
+    test("returns 404 status and error message when bad endpoint requested", async () => {
+      await request(app)
         .get("/api/alien")
         .expect(404)
         .then(({ body }) => {
-          expect(body.msg).toBe("Not Found")
-        })
-    })
-  })
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
 });

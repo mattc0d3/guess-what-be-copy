@@ -1,9 +1,10 @@
 const  { selectAliens }  = require('../models/aliens.models')
 
-exports.getAliens = (req, res, next) =>{
-    selectAliens()
-    .then((aliens) =>{
+exports.getAliens = async (req, res, next) =>{
+    try {
+        const aliens = await selectAliens()
         res.status(200).send({ aliens })
-    })
-    .catch(next)
+    } catch (err) {
+        res.status(500).send({ msg: "Internal Error" })
+    }
 }
