@@ -1,4 +1,4 @@
-const chooseAliens = require('../utils/utils')
+const chooseAliens = require('../utils/chooseAliens')
 const Alien = require("../db/seeds/Alien");
 
 exports.selectAliens = async () =>{

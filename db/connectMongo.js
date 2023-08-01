@@ -1,26 +1,24 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-require('dotenv').config()
+require("dotenv").config();
 
-let DB_CONNECTION
+let DB_CONNECTION;
 
 if (process.env.NODE_ENV === "test") {
-    console.log("we're in test mode")
-    DB_CONNECTION = process.env.LOCALHOST_DB
+  console.log("we're in test mode");
+  DB_CONNECTION = process.env.LOCALHOST_DB;
 } else {
-    console.log("we're in production mode")
-    DB_CONNECTION = process.env.MONGODB_CONNECT_URI
+  console.log("we're in production mode");
+  DB_CONNECTION = process.env.MONGODB_CONNECT_URI;
 }
 
-const connectDB = async () =>{
-    try{
-        // await mongoose.connect(process.env.MONGODB_CONNECT_URI)
-        await mongoose.connect(DB_CONNECTION);
-        console.log('Connected to MongoDB successfully')
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DB_CONNECTION);
+    console.log("Connected to MongoDB successfully");
+  } catch (error) {
+    console.log("Connection failed", error.message);
+  }
+};
 
-    }catch(error){
-        console.log('Connection failed', error.message)
-    }
-}
-
-module.exports = connectDB
+module.exports = connectDB;

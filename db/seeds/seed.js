@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Alien = require("./Alien");
-const Question = require("./Question");
+const AllQuestions = require("./Question");
 const connectDB = require("../connectMongo");
+const formatQuestions = require("../../utils/formatQuestions");
 
 connectDB();
 
@@ -31,43 +32,22 @@ async function seed(attributes) {
   await seedAliens(attributes);
 
   async function seedQuestions(attributes) {
-    attributes.skinColour.forEach(async (colour) => {
-      const question = new Question({ question: `${colour} skin?` });
-      await question.save();
-    });
-    attributes.horns.forEach(async (number) => {
-      const question = new Question({
-        question: `${number > 0 ? number : ""} horns?`,
-      });
-      await question.save();
-    });
-    attributes.eyes.forEach(async (number) => {
-      const question = new Question({
-        question: `${number} eye${number > 1 ? "s" : ""}?`,
-      });
-      await question.save();
-    });
-    attributes.eyeColour.forEach(async (colour) => {
-      const question = new Question({ question: `${colour} eyes?` });
-      await question.save();
-    });
-    attributes.skinTexture.forEach(async (texture) => {
-      const question = new Question({ question: `${texture} skin?` });
-      await question.save();
-    });
-    attributes.planet.forEach(async (climate) => {
-      const question = new Question({
-        question: `a${climate === "ice" ? "n" : ""} ${climate} planet?`,
-      });
-      await question.save();
-    });
-    const antennaQuestion = new Question({ question: "antenna?" });
-    await antennaQuestion.save();
+    const allQuestionsData = {};
 
-    const friendlyQuestion = new Question({ question: `a friendly face?` });
-    await friendlyQuestion.save();
+    for (const attribute in attributes) {
+      if (attribute === "isActive") break;
+      allQuestionsData[attribute] = attributes[attribute].map((variation) => {
+        return {
+          checkFor: variation.toString(),
+          question: formatQuestions(attribute, variation),
+        };
+      });
+    }
+    await AllQuestions.create(allQuestionsData);
   }
   await seedQuestions(attributes);
+  
+  console.log("Data seeded successfully");
+  await mongoose.connection.close();
 }
-
 module.exports = seed;
