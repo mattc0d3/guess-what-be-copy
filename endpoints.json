@@ -6,18 +6,31 @@
     "description": "serves an array of 24 aliens randomly selected from the aliens database",
     "queries": [],
     "exampleResponse": {
-      "aliens": {
-        "_id": "64c82a7c28ec9bd724a3842a",
-        "skinColour": "blue",
-        "skinTexture": "furry",
-        "eyes": 1,
-        "horns": 0,
-        "eyeColour": "green",
-        "isFriendly": false,
-        "hasAntenna": false,
-        "planet": "desert",
-        "__v": 0
-      }
+      "aliens": [
+        {
+          "_id": "64c82a7c28ec9bd724a3842a",
+          "skinColour": "blue",
+          "skinTexture": "furry",
+          "eyes": 1,
+          "horns": 0,
+          "eyeColour": "green",
+          "isFriendly": false,
+          "hasAntenna": false,
+          "planet": "desert",
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "GET /api/questions": {
+    "description": "serves an array of all possible questions relating to alien attributes, completing end of sentence: 'Does your alien have...'",
+    "queries": [],
+    "exampleResponse": {
+      "questions": [
+        {
+          "question": "5 eyes?"
+        }
+      ]
     }
   }
 }

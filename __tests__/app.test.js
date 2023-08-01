@@ -1,6 +1,6 @@
 const seed = require("../db/seeds/seed");
 const request = require("supertest");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const app = require("../app");
 const { testAttributes } = require("../db/seeds/attributes");
 
@@ -8,9 +8,9 @@ beforeEach(async () => {
   await seed(testAttributes);
 });
 
-afterAll( async () => {
-  await mongoose.connection.close()
-})
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
 describe("GET /api", () => {
   test("responds with JSON object containing endpoints key", async () => {
@@ -21,9 +21,9 @@ describe("GET /api", () => {
       .then(({ body }) => {
         expect(body.hasOwnProperty("endpoints")).toBe(true);
       });
-    });
-    test("endpoints object contains keys of endpoints and object values that describe attributes", async () => {
-      await request(app)
+  });
+  test("endpoints object contains keys of endpoints and object values that describe attributes", async () => {
+    await request(app)
       .get("/api")
       .expect(200)
       .then(({ body }) => {
@@ -74,7 +74,7 @@ describe("GET /api/aliens", () => {
             isFriendly: expect.any(Boolean),
             hasAntenna: expect.any(Boolean),
             planet: expect.any(String),
-            isActive: expect.any(Boolean)
+            isActive: expect.any(Boolean),
           });
         });
       });
@@ -88,5 +88,22 @@ describe("GET /api/aliens", () => {
           expect(body.msg).toBe("Not Found");
         });
     });
+  });
+});
+
+describe("GET /api/questions", () => {
+  test("status 200: should respond with an array of all possible questions", async () => {
+    await request(app)
+      .get("/api/questions")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.questions).toBeInstanceOf(Array);
+        expect(body.questions.length > 0).toBe(true);
+        body.questions.forEach((question) => {
+          expect(question).toMatchObject({
+            question: expect.any(String),
+          });
+        });
+      });
   });
 });

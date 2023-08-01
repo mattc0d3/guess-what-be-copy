@@ -1,16 +1,13 @@
 const mongoose = require("mongoose");
 const Alien = require("./Alien");
-const connectDB = require('../connectMongo')
+const Question = require("./Question");
+const connectDB = require("../connectMongo");
 
-connectDB()
+connectDB();
 
 async function seed(attributes) {
-  
-  // await mongoose.connection.collections["aliens"].drop(async (err) => {
-  //   await console.log("collection dropped");
-  // });
-
-  await mongoose.connection.collection('aliens').deleteMany({})
+  await mongoose.connection.collection("aliens").deleteMany({});
+  await mongoose.connection.collection("questions").deleteMany({});
 
   async function seedAliens(attributes, currentCombination = {}) {
     const attributeKeys = Object.keys(attributes);
@@ -32,6 +29,45 @@ async function seed(attributes) {
     }
   }
   await seedAliens(attributes);
+
+  async function seedQuestions(attributes) {
+    attributes.skinColour.forEach(async (colour) => {
+      const question = new Question({ question: `${colour} skin?` });
+      await question.save();
+    });
+    attributes.horns.forEach(async (number) => {
+      const question = new Question({
+        question: `${number > 0 ? number : ""} horns?`,
+      });
+      await question.save();
+    });
+    attributes.eyes.forEach(async (number) => {
+      const question = new Question({
+        question: `${number} eye${number > 1 ? "s" : ""}?`,
+      });
+      await question.save();
+    });
+    attributes.eyeColour.forEach(async (colour) => {
+      const question = new Question({ question: `${colour} eyes?` });
+      await question.save();
+    });
+    attributes.skinTexture.forEach(async (texture) => {
+      const question = new Question({ question: `${texture} skin?` });
+      await question.save();
+    });
+    attributes.planet.forEach(async (climate) => {
+      const question = new Question({
+        question: `a${climate === "ice" ? "n" : ""} ${climate} planet?`,
+      });
+      await question.save();
+    });
+    const antennaQuestion = new Question({ question: "antenna?" });
+    await antennaQuestion.save();
+
+    const friendlyQuestion = new Question({ question: `a friendly face?` });
+    await friendlyQuestion.save();
+  }
+  await seedQuestions(attributes);
 }
 
 module.exports = seed;

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { getAliens } = require('./controllers/aliens.controllers')
 const { getEndpoints } = require('./controllers/api.controllers')
+const { getQuestions } = require('./controllers/questions.controllers')
 const cors = require('cors');
 const connectDB = require('./db/connectMongo')
 
@@ -17,13 +18,14 @@ app.get("/api", getEndpoints);
 
 app.get("/api/aliens", getAliens);
 
+app.get("/api/questions", getQuestions);
+
 // app.get("/api/aliens/names", getAliensNames);
 
 // app.get("/api/users", getUsers);
 
 // app.post("/api/users", postUsers);
 
-// app.get("/api/questions", getQuestions);
 
 app.all("*", (_, res) => res.status(404).send({ msg: "Not Found"}))
 
