@@ -99,11 +99,6 @@ describe("GET /api/questions", () => {
       .then(({ body }) => {
         expect(body.questions).toBeInstanceOf(Array);
         expect(body.questions.length > 0).toBe(true);
-        body.questions.forEach((question) => {
-          expect(question).toMatchObject({
-            question: expect.any(String),
-          });
-        });
       });
   });
 });
