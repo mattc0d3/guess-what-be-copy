@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Alien = require("./Alien");
-const AllQuestions = require("./Question");
+const Question = require("./Question");
 const connectDB = require("../connectMongo");
 const formatQuestions = require("../../utils/formatQuestions");
 
@@ -32,21 +32,34 @@ async function seed(attributes) {
   await seedAliens(attributes);
 
   async function seedQuestions(attributes) {
-    const allQuestionsData = {};
-
+    console.log("in seed questions function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     for (const attribute in attributes) {
       if (attribute === "isActive") break;
-      allQuestionsData[attribute] = attributes[attribute].map((variation) => {
-        return {
-          checkFor: variation.toString(),
+      attributes[attribute].forEach(async (variation) => {
+        const questionObj = {
+          alienProp: attribute,
+          checkFor: variation.toString,
           question: formatQuestions(attribute, variation),
         };
+        const question = new Question(questionObj);
+        await question.save();
       });
     }
-    await AllQuestions.create(allQuestionsData);
+    //   const allQuestionsData = {};
+
+    //   for (const attribute in attributes) {
+    //     if (attribute === "isActive") break;
+    //     allQuestionsData[attribute] = attributes[attribute].map((variation) => {
+    //       return {
+    //         checkFor: variation.toString(),
+    //         question: formatQuestions(attribute, variation),
+    //       };
+    //     });
+    //   }
+    //   await AllQuestions.create(allQuestionsData);
   }
   await seedQuestions(attributes);
-  
+
   console.log("Data seeded successfully");
   await mongoose.connection.close();
 }
