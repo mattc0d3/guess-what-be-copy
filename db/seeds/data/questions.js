@@ -19,7 +19,7 @@ const questions = {
   eyeColour: {
     red: "red eyes",
     yellow: "yellow eyes",
-    orange: "orange",
+    orange: "orange eyes",
   },
   hasAntenna: {
     true: "antenna",
