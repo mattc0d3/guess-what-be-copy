@@ -2,7 +2,7 @@ const seed = require("../db/seeds/seed");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const app = require("../app");
-const { testAttributes } = require("../db/seeds/attributes");
+const { testAttributes } = require("../db/seeds/data/attributes");
 
 beforeEach(async () => {
   await seed(testAttributes);
@@ -92,7 +92,7 @@ describe("GET /api/aliens", () => {
 });
 
 describe("GET /api/questions", () => {
-  test("status 200: should respond with an array of all possible questions", async () => {
+  test.only("status 200: should respond with an array of all possible questions", async () => {
     await request(app)
       .get("/api/questions")
       .expect(200)

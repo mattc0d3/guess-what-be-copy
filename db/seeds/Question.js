@@ -17,9 +17,9 @@ const { Schema } = mongoose
 //     planet: [questionSchema],
 //   });
 
-const questionSchema = new Schema({
+const questionSchema = new mongoose.Schema({
     alienProp: String,
-    checkFor: String,
+    checkFor: mongoose.Schema.Types.Mixed,
     question: String
 })
   
