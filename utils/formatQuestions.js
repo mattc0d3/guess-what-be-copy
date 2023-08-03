@@ -16,7 +16,7 @@ const formatQuestions = (attribute, variation) => {
     else if (attribute === "isFriendly") question += `${variation ? "friendly" : "scary"} face`
     else if (attribute === "skinTexture") question += "skin"
     else question += attribute
-    
+
     return question + "?"
 }
 
