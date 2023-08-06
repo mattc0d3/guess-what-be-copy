@@ -2,10 +2,11 @@ const seed = require("../db/seeds/seed");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const app = require("../app");
-const { testAttributes } = require("../db/seeds/attributes");
+const { testAttributes } = require("../db/seeds/data/attributes");
+const { questions } = require("../db/seeds/data/questions")
 
 beforeEach(async () => {
-  await seed(testAttributes);
+  await seed(testAttributes, questions);
 });
 
 afterAll(async () => {
@@ -99,6 +100,13 @@ describe("GET /api/questions", () => {
       .then(({ body }) => {
         expect(body.questions).toBeInstanceOf(Array);
         expect(body.questions.length > 0).toBe(true);
+        body.questions.forEach(question => {
+          expect(question).toMatchObject({
+            alienProp: expect.any(String),
+            question: expect.any(String)
+          })
+          expect(question.hasOwnProperty("checkFor")).toBe(true)
+        })
       });
   });
 });
