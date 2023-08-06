@@ -32,7 +32,7 @@ const questions = {
   skinTexture: {
     furry: "furry skin",
     scaly: "scaly skin",
-    smooth: "smooth skin",
+    normal: "normal skin",
   },
   planet: {
     desert: "a desert planet",

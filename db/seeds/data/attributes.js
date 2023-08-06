@@ -5,7 +5,7 @@ const attributes = {
     eyeColour: ["red", "yellow", "orange"],
     hasAntenna: [true, false],
     isFriendly: [true, false],
-    skinTexture: ["furry", "scaly", "smooth"],
+    skinTexture: ["furry", "scaly", "normal"],
     planet: ["desert", "ice", "lava"],
     isActive: [true]
   };

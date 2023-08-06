@@ -45,18 +45,6 @@ async function seed(attributes, questions) {
         await question.save();
       });
     }
-    //   const allQuestionsData = {};
-
-    //   for (const attribute in attributes) {
-    //     if (attribute === "isActive") break;
-    //     allQuestionsData[attribute] = attributes[attribute].map((variation) => {
-    //       return {
-    //         checkFor: variation.toString(),
-    //         question: formatQuestions(attribute, variation),
-    //       };
-    //     });
-    //   }
-    //   await AllQuestions.create(allQuestionsData);
   }
   await seedQuestions(attributes, questions);
 
