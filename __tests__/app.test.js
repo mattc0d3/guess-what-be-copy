@@ -4,14 +4,14 @@ const mongoose = require("mongoose");
 const app = require("../app");
 const { testAttributes } = require("../db/seeds/data/attributes");
 const { questions } = require("../db/seeds/data/questions");
-const { testUsers } = require("../db/seeds/data/testUsers")
+const { testUsers } = require("../db/seeds/data/testUsers");
 
 beforeEach(async () => {
   await seed(testAttributes, questions, testUsers);
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  // await mongoose.connection.close();
 });
 
 describe("GET /api", () => {
@@ -113,15 +113,16 @@ describe("GET /api/questions", () => {
 });
 
 describe("Users", () => {
-  describe.only("GET /api/users", () => {
-    test("status 200: should respond with an array of all users (array may be empty), sorted by score in ascending order and limited to 10 items per page by default", async () => {
+  describe("GET /api/users", () => {
+    test("status 200: should respond with an array of all users, sorted by score in ascending order and limited to 10 items per page by default", async () => {
       await request(app)
         .get("/api/users")
         .expect(200)
         .then(({ body }) => {
           expect(body.users).toBeInstanceOf(Array);
-          expect(body.users).toBeSortedBy("score")
-          expect(body.users.length <= 10).toBe(true)
+          expect(body.users).toBeSortedBy("score");
+          expect(body.users.length > 0).toBe(true);
+          expect(body.users.length <= 10).toBe(true);
           body.users.forEach((user) => {
             expect(user).toMatchObject({
               username: expect.any(String),
@@ -138,36 +139,76 @@ describe("Users", () => {
         .expect(200)
         .then(({ body }) => {
           // console.log(body.users, "<<<<< users in test")
-          let minutesComparison = 0
-          body.users.forEach(user => {
-            expect(user.time.minutes >= minutesComparison).toBe(true)
-            minutesComparison = user.time.minutes
-          })
-        })
-    })
-    test.only("response restricts results by time period query", async () => {
+          expect(body.users.length > 0).toBe(true);
+          let minutesComparison = 0;
+          body.users.forEach((user) => {
+            expect(user.time.minutes >= minutesComparison).toBe(true);
+            minutesComparison = user.time.minutes;
+          });
+        });
+    });
+    test("response restricts results by time period query", async () => {
       await request(app)
-      .get("/api/users?period=month")
-      .expect(200)
-      .then(({ body }) => {
-        // console.log(body.users, "<<<<< users in test")
-        const currentDate = new Date()
-        const currentMonth = currentDate.getMonth()
-        const currentYear = currentDate.getFullYear()
+        .get("/api/users?period=month")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users.length > 0).toBe(true);
+          const currentDate = new Date();
+          const currentMonth = currentDate.getMonth();
+          const currentYear = currentDate.getFullYear();
 
-        body.users.forEach(user => {
-          console.log(user.created_at < new Date(), "<<<< created at < current time")
-          console.log(user.created_at, "<<<<< user date")
-          const userDate = new Date(user.created_at)
-          const userMonth = userDate.getMonth()
-          const userYear = userDate.getFullYear()
-          expect(userMonth < currentMonth || userYear < currentYear).toBe(true)
-        })
+          const today = new Date();
+          const oneMonthAgo = new Date();
+          oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+          // return date >= oneMonthAgo && date <= today;
+
+          body.users.forEach((user) => {
+            console.log(user, "<<<<<<< user");
+            const userDate = new Date(user.created_at);
+            const userMonth = userDate.getMonth();
+            const userYear = userDate.getFullYear();
+            expect(userDate >= oneMonthAgo && userDate <= today).toBe(true);
+            // console.log(userDate.getTime())
+            // console.log(currentDate.setMonth(currentDate.getMonth() - 1))
+            // expect(userDate.getTime() < currentDate.setMonth(currentDate.getMonth() - 1))
+          });
+        });
+    });
+    test("response paginates by page query", async () => {
+      await request(app)
+        .get("/api/users?page=2")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users).toBeInstanceOf(Array);
+          expect(body.users).toBeSortedBy("score");
+          expect(body.users.length <= 10).toBe(true);
+        });
+    });
+    test("endpoint can handle multiple queries simultaneously", async () => {
+      await request(app)
+        .get("/api/users?sort_by=time&period=week&page=1")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users.length > 0).toBe(true);
+          let minutesComparison = 0;
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          body.users.forEach((user) => {
+            expect(user.time.minutes >= minutesComparison).toBe(true);
+            minutesComparison = user.time.minutes;
+            const userDate = new Date(user.created_at);
+            expect(userDate >= oneWeekAgo).toBe(true);
+          });
+        });
+    });
+    test("returns 400 error when invalid queries requested", async () => {
+      await request(app)
+      .get("/api/users?sort_by=bananas")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request")
       })
-    })
-    test.todo("response paginates by page query")
-    test.todo("endpoint can handle multiple queries simultaneously")
-    test.todo("returns 400 error when invalid queries requested")
+    });
   });
   describe("POST /api/users", () => {
     test("status 201: responds with a user object formatted to contain the posted info", async () => {
@@ -201,6 +242,28 @@ describe("Users", () => {
         })
         .expect(201);
     });
+    test("response converts input to correct data format and responds when wrong types submitted", async () => {
+      await request(app)
+        .post("/api/users")
+        .send({
+          username: false,
+          score: "7",
+          minutes: true,
+          seconds: 15,
+        })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.user).toMatchObject({
+            username: "false",
+            score: 7,
+            time: {
+              seconds: 15,
+              minutes: 1,
+            },
+            created_at: expect.any(String),
+          });
+        });
+    });
     test("status 400: returns error message when post info is incomplete", async () => {
       await request(app)
         .post("/api/users")
@@ -208,20 +271,6 @@ describe("Users", () => {
           username: "test user",
           score: 7,
           minutes: 2,
-        })
-        .expect(400)
-        .then(({ body }) => {
-          expect(body.msg).toBe("Bad Request");
-        });
-    });
-    test("status 400: returns error when request body contains wrong data types", async () => {
-      await request(app)
-        .post("/api/users")
-        .send({
-          username: "test user",
-          score: "7",
-          minutes: 2,
-          seconds: 15,
         })
         .expect(400)
         .then(({ body }) => {
