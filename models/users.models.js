@@ -84,7 +84,8 @@ exports.selectUsers = async (sort_by = "score", page = 1, period = null) => {
         const users = await User.find(query).sort(sort).limit(10).skip(skip)
         return users
 
-    } catch (err) {
+    } catch (error) {
+        return next(error)
         return res.status(500).send({ msg: "Internal Error" })
     }
 }
@@ -102,7 +103,7 @@ exports.insertUser = async (username, score, minutes, seconds) => {
         })
         await newUser.save()
         return newUser
-    } catch (err) {
+    } catch (error) {
         console.log("caught error in 400 insertUser model")
         return Promise.reject({ status: 400, msg: "Bad Request"})
         return res.status(400).send({ msg: "Bad Request"})

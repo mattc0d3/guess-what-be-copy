@@ -31,7 +31,7 @@ async function seed(attributes, questions, testUsers) {
       seedAliens(remainingAttributes, newCombination);
     }
   }
-  // await seedAliens(attributes);
+  await seedAliens(attributes);
 
   async function seedQuestions(attributes, questions) {
     for (const attribute in attributes) {
@@ -48,7 +48,7 @@ async function seed(attributes, questions, testUsers) {
       });
     }
   }
-  // await seedQuestions(attributes, questions);
+  await seedQuestions(attributes, questions);
 
   async function seedTestUsers(testUsers) {
     testUsers.forEach(async (testUser) => {

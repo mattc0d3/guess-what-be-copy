@@ -7,7 +7,8 @@ exports.selectAliens = async () => {
         // console.log(aliens.length, "<<<<<<<<<<<<< aliens length")
         const randomAliens = chooseAliens(aliens)
         return randomAliens
-    } catch (err) {
+    } catch (error) {
+        return next(error)
         res.status(500).send({ msg: "Internal Error" })
     }
 }

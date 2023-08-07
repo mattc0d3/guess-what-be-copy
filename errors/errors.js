@@ -1,4 +1,4 @@
-exports.handlePsqlErrors = (err, req, res, next) => {
+exports.handleMongoErrors = (err, req, res, next) => {
     console.log("IN MONGO ERROR HANDLER")
     if (err.code) {
         return res.status(400).send({ msg: "Bad Request"})

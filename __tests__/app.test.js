@@ -11,7 +11,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  // await mongoose.connection.close();
+  await mongoose.connection.close();
 });
 
 describe("GET /api", () => {

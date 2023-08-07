@@ -4,7 +4,7 @@ const { getAliens } = require('./controllers/aliens.controllers')
 const { getEndpoints } = require('./controllers/api.controllers')
 const { getQuestions } = require('./controllers/questions.controllers')
 const { getUsers, postUsers } = require('./controllers/users.controllers')
-const { handlePsqlErrors, handleCustomErrors, handleInternalErrors} = require('./errors/errors')
+const { handleMongoErrors, handleCustomErrors, handleInternalErrors} = require('./errors/errors')
 const cors = require('cors');
 const connectDB = require('./db/connectMongo')
 
@@ -30,7 +30,7 @@ app.post("/api/users", postUsers);
 
 app.all("*", (_, res) => res.status(404).send({ msg: "Not Found"}))
 
-app.use(handlePsqlErrors)
+app.use(handleMongoErrors)
 
 app.use(handleCustomErrors)
 

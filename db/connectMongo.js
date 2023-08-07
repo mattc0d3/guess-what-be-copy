@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "test") {
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(DB_CONNECTION);
+    await mongoose.connect(process.env.LOCALHOST_DB);
     console.log("Connected to MongoDB successfully");
   } catch (error) {
     console.log("Connection failed", error.message);

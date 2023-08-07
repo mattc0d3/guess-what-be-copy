@@ -4,7 +4,8 @@ exports.getQuestions = async (_, res) => {
     try {
         const questions = await selectQuestions()
         res.status(200).send({ questions })
-    } catch (err) {
+    } catch (error) {
+        return next(error)
         res.status(500).send({ msg: "Internal Error" })
     }
 }
