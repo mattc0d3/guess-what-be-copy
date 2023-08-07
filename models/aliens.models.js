@@ -1,7 +1,7 @@
 const chooseAliens = require('../utils/chooseAliens')
-const Alien = require("../db/seeds/Alien");
+const Alien = require("../db/seeds/schemata/Alien");
 
-exports.selectAliens = async () =>{
+exports.selectAliens = async () => {
     try {
         const aliens = await Alien.find()
         // console.log(aliens.length, "<<<<<<<<<<<<< aliens length")

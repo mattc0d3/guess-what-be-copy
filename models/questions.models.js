@@ -1,4 +1,4 @@
-const Question = require("../db/seeds/Question")
+const Question = require("../db/seeds/schemata/Question")
 
 exports.selectQuestions = async () => {
     try {
