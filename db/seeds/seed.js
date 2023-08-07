@@ -60,6 +60,7 @@ async function seed(attributes, questions, testUsers) {
           seconds: testUser.seconds
         }
       }
+      {testUser.created_at ? userObj.created_at = testUser.created_at : null}
       const user = new User(userObj)
       await user.save()
     })

@@ -113,7 +113,7 @@ describe("GET /api/questions", () => {
 });
 
 describe("Users", () => {
-  describe("GET /api/users", () => {
+  describe.only("GET /api/users", () => {
     test("status 200: should respond with an array of all users (array may be empty), sorted by score in ascending order and limited to 10 items per page by default", async () => {
       await request(app)
         .get("/api/users")
@@ -132,20 +132,43 @@ describe("Users", () => {
           });
         });
     });
-    test.only("sorts response by time in ascending order when time specified as sort_by query", async () => {
+    test("sorts response by time in ascending order when time specified as sort_by query", async () => {
       await request(app)
         .get("/api/users?sort_by=time")
         .expect(200)
         .then(({ body }) => {
-          console.log(body.users, "<<<<< users in test")
+          // console.log(body.users, "<<<<< users in test")
           let minutesComparison = 0
           body.users.forEach(user => {
             expect(user.time.minutes >= minutesComparison).toBe(true)
             minutesComparison = user.time.minutes
           })
+        })
     })
+    test.only("response restricts results by time period query", async () => {
+      await request(app)
+      .get("/api/users?period=month")
+      .expect(200)
+      .then(({ body }) => {
+        // console.log(body.users, "<<<<< users in test")
+        const currentDate = new Date()
+        const currentMonth = currentDate.getMonth()
+        const currentYear = currentDate.getFullYear()
+
+        body.users.forEach(user => {
+          console.log(user.created_at < new Date(), "<<<< created at < current time")
+          console.log(user.created_at, "<<<<< user date")
+          const userDate = new Date(user.created_at)
+          const userMonth = userDate.getMonth()
+          const userYear = userDate.getFullYear()
+          expect(userMonth < currentMonth || userYear < currentYear).toBe(true)
+        })
+      })
+    })
+    test.todo("response paginates by page query")
+    test.todo("endpoint can handle multiple queries simultaneously")
+    test.todo("returns 400 error when invalid queries requested")
   });
-})
   describe("POST /api/users", () => {
     test("status 201: responds with a user object formatted to contain the posted info", async () => {
       await request(app)

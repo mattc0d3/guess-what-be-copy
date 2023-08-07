@@ -1,9 +1,9 @@
 const { selectUsers, insertUser } = require('../models/users.models')
 
 exports.getUsers = async (req, res) => {
-    const { sort_by } = req.query
+    const { sort_by, page, period } = req.query
     try {
-        const users = await selectUsers(sort_by)
+        const users = await selectUsers(sort_by, page, period)
         res.status(200).send({ users })
     } catch (err) {
         res.status(500).send({ msg: "Internal Error" });
