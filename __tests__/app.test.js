@@ -133,6 +133,15 @@ describe("Users", () => {
           });
         });
     });
+    test("response object contains totalUsers property containing count of all results", async () => {
+      await request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.hasOwnProperty("totalResults")).toBe(true)
+          expect(typeof body.totalResults).toBe("number")
+        });
+    });
     test("sorts response by time in ascending order when time specified as sort_by query", async () => {
       await request(app)
         .get("/api/users?sort_by=time")
@@ -191,11 +200,11 @@ describe("Users", () => {
     });
     test("returns 400 error when invalid queries requested", async () => {
       await request(app)
-      .get("/api/users?sort_by=bananas")
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request")
-      })
+        .get("/api/users?sort_by=bananas")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
     });
   });
   describe("POST /api/users", () => {

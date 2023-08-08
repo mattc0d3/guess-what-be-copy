@@ -40,6 +40,15 @@ exports.selectUsers = async (sort_by = "score", page = 1, period = null) => {
     }
 }
 
+exports.selectAllUsers = async () => {
+    try {
+        const allUsers = await User.find()
+        return allUsers.length
+    } catch (error) {
+        return next(error)
+    }
+}
+
 exports.insertUser = async (username, score, minutes, seconds) => {
     try {
         const newUser = new User({
