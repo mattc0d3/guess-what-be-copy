@@ -8,8 +8,8 @@ const formatQuestions = require("../../utils/formatQuestions");
 connectDB();
 
 async function seed(attributes, questions, testUsers) {
-  // await mongoose.connection.collection("aliens").deleteMany({});
-  // await mongoose.connection.collection("questions").deleteMany({});
+  await mongoose.connection.collection("aliens").deleteMany({});
+  await mongoose.connection.collection("questions").deleteMany({});
   await mongoose.connection.collection("users").deleteMany({});
 
   async function seedAliens(attributes, currentCombination = {}) {

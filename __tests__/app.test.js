@@ -138,7 +138,6 @@ describe("Users", () => {
         .get("/api/users?sort_by=time")
         .expect(200)
         .then(({ body }) => {
-          // console.log(body.users, "<<<<< users in test")
           expect(body.users.length > 0).toBe(true);
           let minutesComparison = 0;
           body.users.forEach((user) => {
@@ -153,24 +152,13 @@ describe("Users", () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.users.length > 0).toBe(true);
-          const currentDate = new Date();
-          const currentMonth = currentDate.getMonth();
-          const currentYear = currentDate.getFullYear();
-
           const today = new Date();
           const oneMonthAgo = new Date();
           oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-          // return date >= oneMonthAgo && date <= today;
 
           body.users.forEach((user) => {
-            console.log(user, "<<<<<<< user");
             const userDate = new Date(user.created_at);
-            const userMonth = userDate.getMonth();
-            const userYear = userDate.getFullYear();
             expect(userDate >= oneMonthAgo && userDate <= today).toBe(true);
-            // console.log(userDate.getTime())
-            // console.log(currentDate.setMonth(currentDate.getMonth() - 1))
-            // expect(userDate.getTime() < currentDate.setMonth(currentDate.getMonth() - 1))
           });
         });
     });

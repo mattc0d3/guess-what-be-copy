@@ -6,6 +6,5 @@ exports.selectQuestions = async () => {
         return questions
     } catch (error) {
         return next(error)
-        res.status(500).send({ msg: "Internal Error" })
     }
 }

@@ -4,11 +4,9 @@ const Alien = require("../db/seeds/schemata/Alien");
 exports.selectAliens = async () => {
     try {
         const aliens = await Alien.find()
-        // console.log(aliens.length, "<<<<<<<<<<<<< aliens length")
         const randomAliens = chooseAliens(aliens)
         return randomAliens
     } catch (error) {
         return next(error)
-        res.status(500).send({ msg: "Internal Error" })
     }
 }

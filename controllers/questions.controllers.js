@@ -6,6 +6,5 @@ exports.getQuestions = async (_, res) => {
         res.status(200).send({ questions })
     } catch (error) {
         return next(error)
-        res.status(500).send({ msg: "Internal Error" })
     }
 }
