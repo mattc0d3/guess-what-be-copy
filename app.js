@@ -25,8 +25,8 @@ let arr = [];
 let playingArray = [];
 
 io.on('connection', (socket) => {
-  console.log(socket.id, '<--socket id');
   socket.on('find', (e) => {
+    console.log(e.name);
     socket.emit('your-socketid', socket.id);
     if (e.name !== null) {
       arr.push({ name: e.name, socket_id: socket.id });
