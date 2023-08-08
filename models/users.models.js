@@ -1,7 +1,6 @@
 const User = require('../db/seeds/schemata/User')
 
 exports.selectUsers = async (sort_by = "score", page = 1, period = null) => {
-    console.log("in users model")
     const validSortBy = ["score", "time", "created_at"]
     const validPeriod = ["week", "month", "year"]
 
