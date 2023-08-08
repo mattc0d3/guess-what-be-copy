@@ -1,14 +1,16 @@
 const mongoose = require("mongoose");
-const Alien = require("./Alien");
-const Question = require("./Question");
+const Alien = require("./schemata/Alien");
+const Question = require("./schemata/Question");
+const User = require("./schemata/User")
 const connectDB = require("../connectMongo");
 const formatQuestions = require("../../utils/formatQuestions");
 
 connectDB();
 
-async function seed(attributes, questions) {
+async function seed(attributes, questions, testUsers) {
   await mongoose.connection.collection("aliens").deleteMany({});
   await mongoose.connection.collection("questions").deleteMany({});
+  await mongoose.connection.collection("users").deleteMany({});
 
   async function seedAliens(attributes, currentCombination = {}) {
     const attributeKeys = Object.keys(attributes);
@@ -47,6 +49,23 @@ async function seed(attributes, questions) {
     }
   }
   await seedQuestions(attributes, questions);
+
+  async function seedTestUsers(testUsers) {
+    testUsers.forEach(async (testUser) => {
+      const userObj = {
+        username: testUser.username,
+        score: testUser.score,
+        time: {
+          minutes: testUser.minutes,
+          seconds: testUser.seconds
+        }
+      }
+      {testUser.created_at ? userObj.created_at = testUser.created_at : null}
+      const user = new User(userObj)
+      await user.save()
+    })
+  }
+  await seedTestUsers(testUsers)
 
   console.log("Data seeded successfully");
   // await mongoose.connection.close();
