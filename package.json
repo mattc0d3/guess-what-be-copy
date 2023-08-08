@@ -7,7 +7,7 @@
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
-    "dev": "node listen.js",
+    "dev": "node app.js",
     "seed-prod": "NODE_ENV=production npm run seed",
     "start": "node listen.js",
     "devStart": "nodemon seed.js"

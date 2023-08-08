@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app);
 const { getAliens } = require('./controllers/aliens.controllers');
 const { getEndpoints } = require('./controllers/api.controllers');
 const { getQuestions } = require('./controllers/questions.controllers');
 const cors = require('cors');
 const connectDB = require('./db/connectMongo');
 
-const io = require('socket.io')(8081, { cors: { origin: '*' } });
+const port = process.env.PORT || 8080;
+
+const io = require('socket.io')(server, { cors: { origin: '*' } });
+
+server.listen(port, () => {
+  console.log(`listening on port ${port}`);
+});
 
 let arr = [];
 let playingArray = [];
