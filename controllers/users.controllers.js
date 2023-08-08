@@ -1,10 +1,11 @@
-const { selectUsers, insertUser } = require('../models/users.models')
+const { selectUsers, selectAllUsers, insertUser } = require('../models/users.models')
 
 exports.getUsers = async (req, res, next) => {
     const { sort_by, page, period } = req.query
     try {
         const users = await selectUsers(sort_by, page, period)
-        res.status(200).send({ users })
+        const totalResults = await selectAllUsers()
+        res.status(200).send({ users, totalResults })
     } catch (error) {
         return next(error)
     }
