@@ -15,7 +15,9 @@ const connectDB = require('./db/connectMongo');
 
 const port = process.env.PORT || 8080;
 
-const io = require('socket.io')(server, { cors: { origin: '*' } });
+const io = require('socket.io')(server, {
+  cors: { origin: '*' },
+});
 
 server.listen(port, () => {
   console.log(`listening on port ${port}`);
@@ -23,13 +25,15 @@ server.listen(port, () => {
 
 let arr = [];
 let playingArray = [];
+let alienArray = [];
 
 io.on('connection', (socket) => {
   socket.on('find', (e) => {
-    console.log(e.name);
     socket.emit('your-socketid', socket.id);
     if (e.name !== null) {
+      console.log(e.aliens);
       arr.push({ name: e.name, socket_id: socket.id });
+      alienArray.push(e.aliens);
 
       if (arr.length >= 2) {
         let p1obj = {
@@ -44,10 +48,12 @@ io.on('connection', (socket) => {
         let obj = {
           p1: p1obj,
           p2: p2obj,
+          allAliens: alienArray[0],
         };
         playingArray.push(obj);
 
         arr.splice(0, 2);
+        alienArray.splice(0, 2);
 
         io.emit('find', { allPlayers: playingArray });
 
