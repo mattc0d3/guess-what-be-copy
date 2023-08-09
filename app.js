@@ -16,7 +16,7 @@ const connectDB = require('./db/connectMongo');
 const port = process.env.PORT || 8080;
 
 const io = require('socket.io')(server, {
-  cors: { origin: ['https://guess-what-gitkermit.netlify.app', "http://localhost:3000" ]}, // OR "localhost:3000"
+  cors: { origin: ['https://guess-what-gitkermit.netlify.app', "http://localhost:3000" ]},
 });
 
 server.listen(port, () => {
@@ -30,7 +30,7 @@ let alienArray = [];
 io.on('connection', (socket) => {
   socket.on('find', (e) => {
     socket.emit('your-socketid', socket.id);
-
+    console.log(e.name, "<<<<<<< e.name")
     if (e.name !== null) {
       arr.push({ name: e.name, socket_id: socket.id });
       alienArray.push(e.aliens);
@@ -53,6 +53,8 @@ io.on('connection', (socket) => {
           allAliens: alienArray[0],
         };
         playingArray.push(obj);
+
+        console.log(playingArray, "<<<<<< playing array")
 
         arr.splice(0, 2);
         alienArray.splice(0, 2);
