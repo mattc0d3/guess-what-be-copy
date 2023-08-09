@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
   socket.on('find', (e) => {
     socket.emit('your-socketid', socket.id);
     console.log(e.name, "<<<<<<< e.name")
-    if (e.name !== null) {
+    if (e.name !== null && e.name !== "") {
       arr.push({ name: e.name, socket_id: socket.id });
       alienArray.push(e.aliens);
 
