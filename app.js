@@ -27,6 +27,10 @@ let arr = [];
 let playingArray = [];
 let alienArray = [];
 
+console.log(arr, "<<<<<< arr")
+console.log(playingArray, "<<<<< playArray")
+console.log(alienArray, "<<<<< alienArray")
+
 console.log("backend log")
 
 io.on('connection', (socket) => {
