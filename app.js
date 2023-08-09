@@ -1,24 +1,30 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const server = require('http').createServer(app);
-const { getAliens } = require('./controllers/aliens.controllers');
-const { getEndpoints } = require('./controllers/api.controllers');
-const { getQuestions } = require('./controllers/questions.controllers');
-const { getUsers, postUsers } = require('./controllers/users.controllers');
+const server = require("http").createServer(app);
+const { getAliens } = require("./controllers/aliens.controllers");
+const { getEndpoints } = require("./controllers/api.controllers");
+const { getQuestions } = require("./controllers/questions.controllers");
+const { getUsers, postUsers } = require("./controllers/users.controllers");
 const {
   handleMongoErrors,
   handleCustomErrors,
   handleInternalErrors,
-} = require('./errors/errors');
-const cors = require('cors');
-const connectDB = require('./db/connectMongo');
+} = require("./errors/errors");
+const cors = require("cors");
+const connectDB = require("./db/connectMongo");
 
-console.log("ON THE COPY VERSION")
+console.log("ON THE COPY VERSION");
 
 const port = process.env.PORT || 8080;
 
-const io = require('socket.io')(server, {
-  cors: { origin: ["https://peaceful-cupcake-57dcec.netlify.app", "https://spontaneous-valkyrie-34ea0c.netlify.app", "http://localhost:3000" ]},
+const io = require("socket.io")(server, {
+  cors: {
+    origin: [
+      "https://peaceful-cupcake-57dcec.netlify.app",
+      "https://spontaneous-valkyrie-34ea0c.netlify.app",
+      "http://localhost:3000",
+    ],
+  },
 });
 
 server.listen(port, () => {
@@ -29,80 +35,82 @@ let arr = [];
 let playingArray = [];
 let alienArray = [];
 
-console.log(arr, "<<<<<< arr")
-console.log(playingArray, "<<<<< playArray")
-console.log(alienArray, "<<<<< alienArray")
+console.log(arr, "<<<<<< arr");
+console.log(playingArray, "<<<<< playArray");
+console.log(alienArray, "<<<<< alienArray");
 
-console.log("backend log")
+console.log("backend log");
 
-io.on('connection', (socket) => {
-  console.log("socket connection successful")
-  socket.on('find', (e) => {
-    socket.emit('your-socketid', socket.id);
-    console.log(socket.id, "<<<<<socket.id")
-    console.log(e, "<<<<<<<< e")
-    console.log(e.name, "<<<<<<< e.name")
-    console.log((typeof e.name), "<<<<<<< type of e.name")
+io.on("connection", (socket) => {
+  console.log("socket connection successful");
+  socket.on("find", (e) => {
+    socket.emit("your-socketid", socket.id);
+    console.log(socket.id, "<<<<<socket.id");
+    console.log(e, "<<<<<<<< e");
+    console.log(e.name, "<<<<<<< e.name");
+    console.log(typeof e.name, "<<<<<<< type of e.name");
     if (e.name !== null && e.name !== "") {
-      arr.push({ name: e.name, socket_id: socket.id });
-      alienArray.push(e.aliens);
+      if (!arr.includes(e.name)) {
+        arr.push({ name: e.name, socket_id: socket.id });
+        alienArray.push(e.aliens);
 
-      if (arr.length >= 2) {
-        let p1obj = {
-          p1name: arr[0].name,
-          p1socketId: arr[0].socket_id,
-          p1alien: alienArray[0][Math.floor(Math.random() * 24)],
-        };
-        let p2obj = {
-          p2name: arr[1].name,
-          p2socketId: arr[1].socket_id,
-          p2alien: alienArray[0][Math.floor(Math.random() * 24)],
-        };
+        if (arr.length >= 2) {
+          let p1obj = {
+            p1name: arr[0].name,
+            p1socketId: arr[0].socket_id,
+            p1alien: alienArray[0][Math.floor(Math.random() * 24)],
+          };
+          let p2obj = {
+            p2name: arr[1].name,
+            p2socketId: arr[1].socket_id,
+            p2alien: alienArray[0][Math.floor(Math.random() * 24)],
+          };
 
-        let obj = {
-          p1: p1obj,
-          p2: p2obj,
-          allAliens: alienArray[0],
-        };
-        playingArray.push(obj);
+          let obj = {
+            p1: p1obj,
+            p2: p2obj,
+            allAliens: alienArray[0],
+          };
+          playingArray.push(obj);
 
-        console.log(playingArray, "<<<<<< playing array")
+          console.log(playingArray, "<<<<<< playing array");
 
-        arr.splice(0, 2);
-        alienArray.splice(0, 2);
+          arr.splice(0, 2);
+          alienArray.splice(0, 2);
 
-        io.emit('find', { allPlayers: playingArray });
+          io.emit("find", { allPlayers: playingArray });
 
-        playingArray.splice(0, 1);
+          playingArray.splice(0, 1);
+        }
       }
     }
   });
-  socket.on('start-game', () => {
-    io.emit('proceed');
+  socket.on("start-game", () => {
+    io.emit("proceed");
   });
 });
 
-require('dotenv').config();
+require("dotenv").config();
 
 connectDB();
 
-app.use(cors({origin: "*"}));
+app.use(cors({ origin: "*" }));
 
 app.use(express.json());
 
-app.get('/api', getEndpoints);
+app.get("/api", getEndpoints);
 
-app.get('/api/aliens', getAliens);
+app.get("/api/aliens", getAliens);
 
-app.get('/api/questions', getQuestions);
+app.get("/api/questions", getQuestions);
 
-app.get('/api/users', getUsers);
+app.get("/api/users", getUsers);
 
-app.post('/api/users', postUsers);
+app.post("/api/users", postUsers);
 
 // app.get("/api/aliens/names", getAliensNames);
 
-app.all('*', (_, res) => res.status(404).send({ msg: 'Not Found' }));
+app.all("*", (_, res) => res.status(404).send({ msg: "Not Found" }));
 
 app.use(handleMongoErrors);
 
