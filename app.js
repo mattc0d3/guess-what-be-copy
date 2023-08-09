@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
         arr.push({ name: e.name, socket_id: socket.id });
         alienArray.push(e.aliens);
 
-        if (arr.length >= 2) {
+        if (arr.length >= 2 && arr[0].socket_id !== arr[1].socket_id) {
           let p1obj = {
             p1name: arr[0].name,
             p1socketId: arr[0].socket_id,
