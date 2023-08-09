@@ -18,7 +18,7 @@ console.log("ON THE COPY VERSION")
 const port = process.env.PORT || 8080;
 
 const io = require('socket.io')(server, {
-  cors: { origin: ["https://spontaneous-valkyrie-34ea0c.netlify.app", "https://peaceful-cupcake-57dcec.netlify.app", "http://localhost:3000" ]},
+  cors: { origin: ["https://peaceful-cupcake-57dcec.netlify.app", "https://spontaneous-valkyrie-34ea0c.netlify.app", "http://localhost:3000" ]},
 });
 
 server.listen(port, () => {
