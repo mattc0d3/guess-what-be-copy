@@ -39,7 +39,10 @@ io.on('connection', (socket) => {
   console.log("socket connection successful")
   socket.on('find', (e) => {
     socket.emit('your-socketid', socket.id);
+    console.log(socket.id, "<<<<<socket.id")
+    console.log(e, "<<<<<<<< e")
     console.log(e.name, "<<<<<<< e.name")
+    console.log((typeof e.name), "<<<<<<< type of e.name")
     if (e.name !== null && e.name !== "") {
       arr.push({ name: e.name, socket_id: socket.id });
       alienArray.push(e.aliens);
