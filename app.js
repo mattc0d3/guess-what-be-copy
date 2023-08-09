@@ -27,7 +27,10 @@ let arr = [];
 let playingArray = [];
 let alienArray = [];
 
+console.log("backend log")
+
 io.on('connection', (socket) => {
+  console.log("socket connection successful")
   socket.on('find', (e) => {
     socket.emit('your-socketid', socket.id);
     console.log(e.name, "<<<<<<< e.name")
