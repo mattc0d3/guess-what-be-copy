@@ -16,7 +16,7 @@ const connectDB = require('./db/connectMongo');
 const port = process.env.PORT || 8080;
 
 const io = require('socket.io')(server, {
-  cors: { origin: "http://localhost:3000"}, // OR "localhost:3000"
+  cors: { origin: 'https://guess-what-gitkermit.netlify.app' }, // OR "localhost:3000"
 });
 
 server.listen(port, () => {
