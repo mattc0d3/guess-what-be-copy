@@ -13,6 +13,8 @@ const {
 const cors = require('cors');
 const connectDB = require('./db/connectMongo');
 
+console.log("ON THE COPY VERSION")
+
 const port = process.env.PORT || 8080;
 
 const io = require('socket.io')(server, {
