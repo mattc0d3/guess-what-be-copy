@@ -91,8 +91,8 @@ io.on("connection", (socket) => {
     io.emit("proceed");
   });
   socket.on("reset", (e) => {
-    console.log(e, "<<<<<<<< e");
-    if (e.length) resetGameArray.push(e);
+    console.log(e, "<<<<<<<< e in reset");
+    if (e) resetGameArray.push(e);
     if (e.length === 2) {
       newBoard.alienArray = [...resetGameArray[0]];
       console.log(newBoardalienArray, "<<<<< newBoard.alienArray");
