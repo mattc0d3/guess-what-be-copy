@@ -90,18 +90,18 @@ io.on("connection", (socket) => {
   socket.on("start-game", () => {
     io.emit("proceed");
   });
-  socket.on("reset", (e) => {
-    console.log(e, "<<<<<<<< e in reset");
-    if (e) resetGameArray.push(e);
-    if (e.length === 2) {
-      newBoard.alienArray = [...resetGameArray[0]];
-      console.log(newBoardalienArray, "<<<<< newBoard.alienArray");
-      newBoard.p1alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
-      newBoard.p2alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
-      console.log(newBoard, "<<<<<< playing array");
-      io.emit("reset", { newBoard });
-    }
-  });
+  // socket.on("reset", (e) => {
+  //   console.log(e.length, "<<<<<<<< e length in reset");
+  //   if (e) resetGameArray.push(e);
+  //   if (e.length === 2) {
+  //     newBoard.alienArray = [...resetGameArray[0]];
+  //     console.log(newBoardalienArray, "<<<<< newBoard.alienArray");
+  //     newBoard.p1alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
+  //     newBoard.p2alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
+  //     console.log(newBoard, "<<<<<< playing array");
+  //     io.emit("reset", { newBoard });
+  //   }
+  // });
 });
 
 require("dotenv").config();
