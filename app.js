@@ -38,10 +38,12 @@ io.on('connection', (socket) => {
         let p1obj = {
           p1name: arr[0].name,
           p1socketId: arr[0].socket_id,
+          p1alien: alienArray[0][Math.floor(Math.random() * 24)],
         };
         let p2obj = {
           p2name: arr[1].name,
           p2socketId: arr[1].socket_id,
+          p2alien: alienArray[0][Math.floor(Math.random() * 24)],
         };
 
         let obj = {
