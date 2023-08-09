@@ -34,6 +34,7 @@ server.listen(port, () => {
 let arr = [];
 let playingArray = [];
 let alienArray = [];
+let resetGameArray = [];
 
 console.log(arr, "<<<<<< arr");
 console.log(playingArray, "<<<<< playArray");
@@ -87,6 +88,26 @@ io.on("connection", (socket) => {
   });
   socket.on("start-game", () => {
     io.emit("proceed");
+  });
+  socket.on("reset", (e) => {
+    console.log(e, "<<<<<<<< e");
+    if (e.length) resetGameArray.push(e);
+    if (e.length === 2) {
+      alienArray = [...resetGameArray[0]];
+      console.log(alienArray, "<<<<< alienArray");
+      playingArray = [];
+      playingArray.push(alienArray);
+      playingArray.push({
+        p1alien: alienArray[Math.floor(Math.random() * 24)],
+      });
+      playingArray.push({
+        p2alien: alienArray[Math.floor(Math.random() * 24)],
+      });
+      console.log(playingArray, "<<<<<< playing array");
+      io.emit("reset", { newBoard: playingArray });
+      alienArray.splice(0, 1);
+      playingArray.splice(0, 1);
+    }
   });
 });
 
