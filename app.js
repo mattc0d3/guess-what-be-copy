@@ -35,6 +35,7 @@ let arr = [];
 let playingArray = [];
 let alienArray = [];
 let resetGameArray = [];
+let newBoard = {}
 
 console.log(arr, "<<<<<< arr");
 console.log(playingArray, "<<<<< playArray");
@@ -93,20 +94,12 @@ io.on("connection", (socket) => {
     console.log(e, "<<<<<<<< e");
     if (e.length) resetGameArray.push(e);
     if (e.length === 2) {
-      alienArray = [...resetGameArray[0]];
-      console.log(alienArray, "<<<<< alienArray");
-      playingArray = [];
-      playingArray.push(alienArray);
-      playingArray.push({
-        p1alien: alienArray[Math.floor(Math.random() * 24)],
-      });
-      playingArray.push({
-        p2alien: alienArray[Math.floor(Math.random() * 24)],
-      });
-      console.log(playingArray, "<<<<<< playing array");
-      io.emit("reset", { newBoard: playingArray });
-      alienArray.splice(0, 1);
-      playingArray.splice(0, 1);
+      newBoard.alienArray = [...resetGameArray[0]];
+      console.log(newBoardalienArray, "<<<<< newBoard.alienArray");
+      newBoard.p1alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
+      newBoard.p2alien = newBoard.alienArray[Math.floor(Math.random() * 24)]
+      console.log(newBoard, "<<<<<< playing array");
+      io.emit("reset", { newBoard });
     }
   });
 });
