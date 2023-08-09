@@ -16,7 +16,7 @@ const connectDB = require('./db/connectMongo');
 const port = process.env.PORT || 8080;
 
 const io = require('socket.io')(server, {
-  cors: { origin: "http://192.168.1.101:3000"}, // OR "localhost:3000"
+  cors: { origin: "http://localhost:3000"}, // OR "localhost:3000"
 });
 
 server.listen(port, () => {
@@ -72,7 +72,7 @@ require('dotenv').config();
 
 connectDB();
 
-app.use(cors());
+app.use(cors({origin: "*"}));
 
 app.use(express.json());
 
