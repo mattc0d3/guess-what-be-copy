@@ -80,12 +80,15 @@ io.on("connection", (socket) => {
 
           console.log(playingArray, "<<<<<< playing array");
 
-          arr.splice(0, 2);
-          alienArray.splice(0, 2);
+          arr = []
+          alienArray = []
+          // arr.splice(0, 2);
+          // alienArray.splice(0, 2);
 
           io.emit("find", { allPlayers: playingArray });
 
-          playingArray.splice(0, 1);
+          playingArray = []
+          // playingArray.splice(0, 1);
         }
       }
     }
