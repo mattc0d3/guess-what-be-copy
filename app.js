@@ -37,6 +37,7 @@ let playingArray = [];
 let alienArray = [];
 let resetGameArray = [];
 let newBoard = {}
+let turnCounter = 0
 
 console.log(arr, "<<<<<< arr");
 console.log(playingArray, "<<<<< playArray");
@@ -91,7 +92,17 @@ io.on("connection", (socket) => {
   });
   socket.on("start-game", () => {
     io.emit("proceed");
+    turnCounter = 0
   });
+
+  socket.on("turnPlayed", () => {
+    turnCounter += 1
+    io.emit("turnIncreased", turnCounter)
+  })
+
+
+
+
   // socket.on("reset", (e) => {
   //   console.log(e.length, "<<<<<<<< e length in reset");
   //   if (e) resetGameArray.push(e);
