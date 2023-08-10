@@ -36,8 +36,8 @@ let arr = [];
 let playingArray = [];
 let alienArray = [];
 let resetGameArray = [];
-let newBoard = {}
-let turnCounter = 0
+let newBoard = {};
+let turnCounter = 0;
 
 console.log(arr, "<<<<<< arr");
 console.log(playingArray, "<<<<< playArray");
@@ -54,57 +54,60 @@ io.on("connection", (socket) => {
     console.log(e.name, "<<<<<<< e.name");
     console.log(typeof e.name, "<<<<<<< type of e.name");
     if (e.name !== null && e.name !== "") {
-      console.log(arr, "<<<<<<<< arr before check and push")
-      if (!arr.some(item => item.name === e.name)) {
-        arr.push({ name: e.name, socket_id: socket.id });
-        alienArray.push(e.aliens);
+      console.log(arr, "<<<<<<<< arr before check and push");
 
-        if (arr.length >= 2 && arr[0].socket_id !== arr[1].socket_id) {
-          let p1obj = {
-            p1name: arr[0].name,
-            p1socketId: arr[0].socket_id,
-            p1alien: alienArray[0][Math.floor(Math.random() * 24)],
-          };
-          let p2obj = {
-            p2name: arr[1].name,
-            p2socketId: arr[1].socket_id,
-            p2alien: alienArray[0][Math.floor(Math.random() * 24)],
-          };
-
-          let obj = {
-            p1: p1obj,
-            p2: p2obj,
-            allAliens: alienArray[0],
-          };
-          playingArray.push(obj);
-
-          console.log(playingArray, "<<<<<< playing array");
-
-          arr = []
-          alienArray = []
-          // arr.splice(0, 2);
-          // alienArray.splice(0, 2);
-
-          io.emit("find", { allPlayers: playingArray });
-
-          playingArray = []
-          // playingArray.splice(0, 1);
+      arr.forEach((item, index) => {
+        if (item.name === e.name) {
+          arr.splice(index, 1);
+          index -= 1;
         }
+      });
+      
+      arr.push({ name: e.name, socket_id: socket.id });
+      alienArray.push(e.aliens);
+
+      if (arr.length >= 2 && arr[0].socket_id !== arr[1].socket_id) {
+        let p1obj = {
+          p1name: arr[0].name,
+          p1socketId: arr[0].socket_id,
+          p1alien: alienArray[0][Math.floor(Math.random() * 24)],
+        };
+        let p2obj = {
+          p2name: arr[1].name,
+          p2socketId: arr[1].socket_id,
+          p2alien: alienArray[0][Math.floor(Math.random() * 24)],
+        };
+
+        let obj = {
+          p1: p1obj,
+          p2: p2obj,
+          allAliens: alienArray[0],
+        };
+        playingArray.push(obj);
+
+        console.log(playingArray, "<<<<<< playing array");
+
+        arr = [];
+        alienArray = [];
+        // arr.splice(0, 2);
+        // alienArray.splice(0, 2);
+
+        io.emit("find", { allPlayers: playingArray });
+
+        playingArray = [];
+        // playingArray.splice(0, 1);
       }
     }
   });
   socket.on("start-game", () => {
     io.emit("proceed");
-    turnCounter = 0
+    turnCounter = 0;
   });
 
   socket.on("turnPlayed", () => {
-    turnCounter += 1
-    io.emit("turnIncreased", turnCounter)
-  })
-
-
-
+    turnCounter += 1;
+    io.emit("turnIncreased", turnCounter);
+  });
 
   // socket.on("reset", (e) => {
   //   console.log(e.length, "<<<<<<<< e length in reset");
