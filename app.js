@@ -89,9 +89,9 @@ io.on("connection", (socket) => {
 
         io.emit("find", { allPlayers: playingArray });
 
-        arr.splice(0, (arr.length -1));
-        alienArray.splice(0, (arr.length -1));
-        playingArray.splice(0, (arr.length -1));
+        // arr.splice(0, (arr.length -1));
+        // alienArray.splice(0, (arr.length -1));
+        // playingArray.splice(0, (arr.length -1));
 
         arr = [];
         alienArray = [];
