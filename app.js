@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
           index -= 1;
         }
       });
-      
+
       arr.push({ name: e.name, socket_id: socket.id });
       alienArray.push(e.aliens);
 
@@ -108,6 +108,10 @@ io.on("connection", (socket) => {
     turnCounter += 1;
     io.emit("turnIncreased", turnCounter);
   });
+
+  socket.on("winner", () => {
+    io.emit("endGame")
+  })
 
   // socket.on("reset", (e) => {
   //   console.log(e.length, "<<<<<<<< e length in reset");
