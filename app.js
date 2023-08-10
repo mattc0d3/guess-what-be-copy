@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
     console.log(typeof e.name, "<<<<<<< type of e.name");
     if (e.name !== null && e.name !== "") {
       console.log(arr, "<<<<<<<< arr before check and push")
-      if (!arr.includes(e.name)) {
+      if (!arr.some(item => item.name === e.name)) {
         arr.push({ name: e.name, socket_id: socket.id });
         alienArray.push(e.aliens);
 
