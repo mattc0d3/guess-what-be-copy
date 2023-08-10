@@ -22,6 +22,7 @@ const io = require("socket.io")(server, {
     origin: [
       "https://peaceful-cupcake-57dcec.netlify.app",
       "https://spontaneous-valkyrie-34ea0c.netlify.app",
+      "https://guess-what-gitkermit.netlify.app",
       "http://localhost:3000",
     ],
   },
