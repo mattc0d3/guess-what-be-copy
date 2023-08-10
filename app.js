@@ -87,15 +87,15 @@ io.on("connection", (socket) => {
 
         console.log(playingArray, "<<<<<< playing array");
 
-        arr = [];
-        alienArray = [];
-        // arr.splice(0, 2);
-        // alienArray.splice(0, 2);
-
         io.emit("find", { allPlayers: playingArray });
 
+        arr.splice(0, (arr.length -1));
+        alienArray.splice(0, (arr.length -1));
+        playingArray.splice(0, (arr.length -1));
+
+        arr = [];
+        alienArray = [];
         playingArray = [];
-        // playingArray.splice(0, 1);
       }
     }
   });
@@ -110,8 +110,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("winner", () => {
-    io.emit("endGame")
-  })
+    io.emit("endGame");
+  });
 
   // socket.on("reset", (e) => {
   //   console.log(e.length, "<<<<<<<< e length in reset");
